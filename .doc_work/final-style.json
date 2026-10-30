@@ -1,0 +1,143 @@
+{
+  "input": "C:\\Users\\yuvra\\Downloads\\Skycast\\Skycast_Project_Documentation.docx",
+  "fonts_by_char_count": {
+    "Times New Roman": 5272
+  },
+  "direct_run_formatting_runs": 244,
+  "direct_paragraph_formatting_paragraphs": 0,
+  "heading_like_paragraphs_not_heading_style": [
+    {
+      "para_index": 120,
+      "text": "Internal Guide Signature",
+      "style": "Normal"
+    },
+    {
+      "para_index": 121,
+      "text": "Head of Department Signature",
+      "style": "Normal"
+    },
+    {
+      "para_index": 125,
+      "text": "Contents",
+      "style": "Normal"
+    },
+    {
+      "para_index": 169,
+      "text": "Layer",
+      "style": "Normal"
+    },
+    {
+      "para_index": 170,
+      "text": "Technology",
+      "style": "Normal"
+    },
+    {
+      "para_index": 171,
+      "text": "Purpose",
+      "style": "Normal"
+    },
+    {
+      "para_index": 187,
+      "text": "Module",
+      "style": "Normal"
+    },
+    {
+      "para_index": 188,
+      "text": "Description",
+      "style": "Normal"
+    },
+    {
+      "para_index": 201,
+      "text": "Step",
+      "style": "Normal"
+    },
+    {
+      "para_index": 202,
+      "text": "Process",
+      "style": "Normal"
+    },
+    {
+      "para_index": 203,
+      "text": "Output",
+      "style": "Normal"
+    },
+    {
+      "para_index": 222,
+      "text": "Actor",
+      "style": "Normal"
+    },
+    {
+      "para_index": 223,
+      "text": "Use Cases",
+      "style": "Normal"
+    },
+    {
+      "para_index": 228,
+      "text": "Component",
+      "style": "Normal"
+    },
+    {
+      "para_index": 229,
+      "text": "Responsibility",
+      "style": "Normal"
+    },
+    {
+      "para_index": 230,
+      "text": "Key Interaction",
+      "style": "Normal"
+    },
+    {
+      "para_index": 246,
+      "text": "Entity",
+      "style": "Normal"
+    },
+    {
+      "para_index": 247,
+      "text": "Field",
+      "style": "Normal"
+    },
+    {
+      "para_index": 248,
+      "text": "Type",
+      "style": "Normal"
+    },
+    {
+      "para_index": 249,
+      "text": "Description",
+      "style": "Normal"
+    }
+  ],
+  "examples": {
+    "direct_run_formatting": [
+      {
+        "para_index": 6,
+        "run_text": "[STUDENT NAME 1 (UNIVERSITY ENROLLMENT NUMBER)]",
+        "style": "Normal"
+      },
+      {
+        "para_index": 7,
+        "run_text": "[STUDENT NAME 2 (UNIVERSITY ENROLLMENT NUMBER)]",
+        "style": "Normal"
+      },
+      {
+        "para_index": 8,
+        "run_text": "[STUDENT NAME 3 (UNIVERSITY ENROLLMENT NUMBER)]",
+        "style": "Normal"
+      },
+      {
+        "para_index": 19,
+        "run_text": "[Replace this acknowledgement with the students own words before submission]",
+        "style": "Normal"
+      },
+      {
+        "para_index": 23,
+        "run_text": "[COMPANY CERTIFICATE TO BE INSERTED]",
+        "style": "Normal"
+      }
+    ]
+  },
+  "notes": [
+    "Direct formatting is not always wrong, but it often causes inconsistent output when templates change.",
+    "Heading-like paragraphs not using Heading styles can break TOC and accessibility."
+  ]
+}

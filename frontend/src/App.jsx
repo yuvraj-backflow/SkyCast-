@@ -7,25 +7,21 @@ import WeatherDetails from "./components/WeatherDetails";
 import FavouriteCities from "./components/FavouriteCities";
 import SearchHistory from "./components/SearchHistory";
 import TemperatureChart from "./components/TemperatureChart";
+import SevenHourForecast from "./components/SevenHourForecast";
 
 // The Vite proxy sends every /api request to Spring Boot on localhost:8080.
 const API = "";
 
 export default function App() {
-  const [theme, setTheme] = useState(() => localStorage.getItem("skycast-theme") || "dark");
   const [query, setQuery] = useState("Ahmedabad");
   const [weather, setWeather] = useState(null);
   const [coordinates, setCoordinates] = useState(null);
   const [forecast, setForecast] = useState([]);
+  const [sevenHourForecast, setSevenHourForecast] = useState([]);
   const [favourites, setFavourites] = useState([]);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem("skycast-theme", theme);
-  }, [theme]);
 
   useEffect(() => {
     loadSideData();
@@ -64,6 +60,16 @@ export default function App() {
     }
   }
 
+  async function loadSevenHourForecast(coords) {
+    if (!coords) return setSevenHourForecast([]);
+    try {
+      const response = await fetch(`${API}/api/hourly/next-seven?lat=${coords.lat}&lon=${coords.lon}`);
+      setSevenHourForecast(response.ok ? await response.json() : []);
+    } catch {
+      setSevenHourForecast([]);
+    }
+  }
+
   async function searchWeather(city = query) {
     const cleanCity = city.trim();
     if (!cleanCity) return;
@@ -81,6 +87,7 @@ export default function App() {
       const coords = await locateCity(data.city);
       setCoordinates(coords);
       loadHourlyForecast(coords);
+      loadSevenHourForecast(coords);
       loadSideData(); // The backend saves the successful search in history.
     } catch (error) {
       setMessage(error.message || "Could not load weather data.");
@@ -117,7 +124,7 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <Header theme={theme} onToggleTheme={() => setTheme(theme === "dark" ? "light" : "dark")} />
+      <Header />
       <SearchBar query={query} onQueryChange={setQuery} onSearch={searchWeather} loading={loading} message={message} />
 
       <section className="dashboard">
@@ -126,6 +133,7 @@ export default function App() {
         <TemperatureChart forecast={forecast} />
         <FavouriteCities favourites={favourites} onSelectCity={searchWeather} onRemove={removeFavourite} />
         <SearchHistory history={history} onSelectCity={searchWeather} onDelete={deleteSearchHistory} />
+        <SevenHourForecast forecast={sevenHourForecast} />
         <WeatherDetails weather={weather} />
       </section>
     </main>
