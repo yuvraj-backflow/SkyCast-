@@ -2,7 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Dto.DtoResponse;
 import com.example.demo.Dto.HourlyForecastResponse;
-import com.example.demo.Dto.SevenHourForecastResponse;
+import com.example.demo.Dto.SevenDayForecastResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.ZoneOffset;
 
 @Service
@@ -114,40 +114,42 @@ try {
     }
 
     /**
-     * Retrieves seven consecutive, hourly forecast points.  This is kept separate
-     * from the three-hour OpenWeather trend feed so the forecast panel has true
-     * hour-by-hour values.
+     * Retrieves the daily minimum/maximum temperature and weather code for the
+     * next seven days from Open-Meteo.
      */
-    public List<SevenHourForecastResponse> getSevenHourForecast(double latitude, double longitude) {
+    public List<SevenDayForecastResponse> getSevenDayForecast(double latitude, double longitude) {
         try {
             String url = UriComponentsBuilder.fromUriString(hourlyForecastUrl)
                     .queryParam("latitude", latitude)
                     .queryParam("longitude", longitude)
-                    .queryParam("hourly", "temperature_2m,weather_code")
-                    .queryParam("forecast_hours", 7)
+                    .queryParam("daily", "temperature_2m_min,temperature_2m_max,weather_code")
+                    .queryParam("forecast_days", 7)
                     .queryParam("timezone", "UTC")
                     .toUriString();
 
             String response = restTemplate.getForObject(url, String.class);
-            JsonNode hourly = objectMapper.readTree(response).path("hourly");
-            JsonNode times = hourly.path("time");
-            JsonNode temperatures = hourly.path("temperature_2m");
-            JsonNode weatherCodes = hourly.path("weather_code");
+            JsonNode daily = objectMapper.readTree(response).path("daily");
+            JsonNode times = daily.path("time");
+            JsonNode minimumTemperatures = daily.path("temperature_2m_min");
+            JsonNode maximumTemperatures = daily.path("temperature_2m_max");
+            JsonNode weatherCodes = daily.path("weather_code");
 
-            if (!times.isArray() || !temperatures.isArray() || !weatherCodes.isArray()) {
+            if (!times.isArray() || !minimumTemperatures.isArray() || !maximumTemperatures.isArray() || !weatherCodes.isArray()) {
                 throw new ResponseStatusException(HttpStatus.BAD_GATEWAY,
-                        "The weather provider returned incomplete hourly forecast data");
+                        "The weather provider returned incomplete daily forecast data");
             }
 
-            int numberOfHours = Math.min(7, Math.min(times.size(), Math.min(temperatures.size(), weatherCodes.size())));
-            List<SevenHourForecastResponse> forecast = new ArrayList<>();
+            int numberOfDays = Math.min(7, Math.min(times.size(), Math.min(minimumTemperatures.size(), Math.min(maximumTemperatures.size(), weatherCodes.size()))));
+            List<SevenDayForecastResponse> forecast = new ArrayList<>();
 
-            for (int index = 0; index < numberOfHours; index++) {
-                long timestamp = LocalDateTime.parse(times.get(index).asText())
+            for (int index = 0; index < numberOfDays; index++) {
+                long timestamp = LocalDate.parse(times.get(index).asText())
+                        .atStartOfDay()
                         .toEpochSecond(ZoneOffset.UTC);
-                forecast.add(new SevenHourForecastResponse(
+                forecast.add(new SevenDayForecastResponse(
                         timestamp,
-                        temperatures.get(index).asDouble(),
+                        minimumTemperatures.get(index).asDouble(),
+                        maximumTemperatures.get(index).asDouble(),
                         weatherCodes.get(index).asInt()
                 ));
             }
@@ -157,7 +159,7 @@ try {
             throw exception;
         } catch (Exception exception) {
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY,
-                    "Unable to retrieve the seven-hour forecast", exception);
+                    "Unable to retrieve the seven-day forecast", exception);
         }
     }
 }

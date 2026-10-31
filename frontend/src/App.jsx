@@ -7,7 +7,7 @@ import WeatherDetails from "./components/WeatherDetails";
 import FavouriteCities from "./components/FavouriteCities";
 import SearchHistory from "./components/SearchHistory";
 import TemperatureChart from "./components/TemperatureChart";
-import SevenHourForecast from "./components/SevenHourForecast";
+import SevenDayForecast from "./components/SevenDayForecast";
 
 // The Vite proxy sends every /api request to Spring Boot on localhost:8080.
 const API = "";
@@ -17,7 +17,7 @@ export default function App() {
   const [weather, setWeather] = useState(null);
   const [coordinates, setCoordinates] = useState(null);
   const [forecast, setForecast] = useState([]);
-  const [sevenHourForecast, setSevenHourForecast] = useState([]);
+  const [sevenDayForecast, setSevenDayForecast] = useState([]);
   const [favourites, setFavourites] = useState([]);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -60,13 +60,13 @@ export default function App() {
     }
   }
 
-  async function loadSevenHourForecast(coords) {
-    if (!coords) return setSevenHourForecast([]);
+  async function loadSevenDayForecast(coords) {
+    if (!coords) return setSevenDayForecast([]);
     try {
-      const response = await fetch(`${API}/api/hourly/next-seven?lat=${coords.lat}&lon=${coords.lon}`);
-      setSevenHourForecast(response.ok ? await response.json() : []);
+      const response = await fetch(`${API}/api/daily?lat=${coords.lat}&lon=${coords.lon}`);
+      setSevenDayForecast(response.ok ? await response.json() : []);
     } catch {
-      setSevenHourForecast([]);
+      setSevenDayForecast([]);
     }
   }
 
@@ -87,7 +87,7 @@ export default function App() {
       const coords = await locateCity(data.city);
       setCoordinates(coords);
       loadHourlyForecast(coords);
-      loadSevenHourForecast(coords);
+      loadSevenDayForecast(coords);
       loadSideData(); // The backend saves the successful search in history.
     } catch (error) {
       setMessage(error.message || "Could not load weather data.");
@@ -133,7 +133,7 @@ export default function App() {
         <TemperatureChart forecast={forecast} />
         <FavouriteCities favourites={favourites} onSelectCity={searchWeather} onRemove={removeFavourite} />
         <SearchHistory history={history} onSelectCity={searchWeather} onDelete={deleteSearchHistory} />
-        <SevenHourForecast forecast={sevenHourForecast} />
+        <SevenDayForecast forecast={sevenDayForecast} />
         <WeatherDetails weather={weather} />
       </section>
     </main>
