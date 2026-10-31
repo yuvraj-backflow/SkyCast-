@@ -34,13 +34,14 @@ private final SearchHistoryService searchHistoryService;
     private String apiUrl;
 @Value("${weather.hourly-forecast.url}")
     private String hourlyForecastUrl;
-//Making of the url
+       //Making of the url
 public DtoResponse getWeather(String city){
 String url= UriComponentsBuilder.fromUriString(apiUrl+"/weather")
         .queryParam("q",city)
         .queryParam("appid",apiKey)
         .queryParam("units","metric")
         .toUriString();
+      // Sending Url For The Object from Open Weather Website
 String response=restTemplate.getForObject(url,String.class);
 try {
     JsonNode jsonNode = objectMapper.readTree(response);

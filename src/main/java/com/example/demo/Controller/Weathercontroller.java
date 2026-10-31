@@ -15,12 +15,12 @@ import java.util.List;
 public class Weathercontroller {
     @Autowired
     private Weatherservice weatherservice;
-    //Se
+    //Search By City //
 @GetMapping("/{city}")
 public DtoResponse getWeather(@PathVariable String city){
         return weatherservice.getWeather(city);
 }
-
+     // Temperature Trend //
 @GetMapping("/hourly")
     public List<HourlyForecastResponse> getHourlyForecast(
             @RequestParam double lat,
@@ -28,7 +28,7 @@ public DtoResponse getWeather(@PathVariable String city){
 ){
     return weatherservice.getHourlyForecast(lat,lon);
 }
-
+      //  7Day ForeCast //
 @GetMapping("/daily")
 public List<SevenDayForecastResponse> getSevenDayForecast(
         @RequestParam double lat,

@@ -15,17 +15,16 @@ public class SearchHistoryService {
     public SearchHistoryService(SearchHistoryRepo searchHistoryRepo) {
         this.searchHistoryRepo = searchHistoryRepo;
     }
- //Adding
+ //Adding the Searched City //
     public void saveSearch(String city){
         searchHistoryRepo.save(new SearchHistory(city));
  }
- //fetching
+ //fetching All Searched City //
     public List<SearchHistory> getHistory(){
         return searchHistoryRepo.findAll();
 
     }
-
-    //Deleting
+    //Deleting City  //
     public void deleteHistory(String city){
         List<SearchHistory> history = searchHistoryRepo.findByCityIgnoreCase(city);
 

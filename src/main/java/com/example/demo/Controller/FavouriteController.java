@@ -15,6 +15,7 @@ import java.util.List;
 public class FavouriteController {
     @Autowired
     private FavouriteService favouriteService;
+    // Add To The Favourite City //
     @PostMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     public FavouriteResponse addFavourite(
@@ -23,12 +24,12 @@ public class FavouriteController {
         FavouriteRequest favouriteRequest){
 return favouriteService.addFavourite(favouriteRequest);
     }
-
+    //  Fetch The Favourite City //
     @GetMapping
     public List<FavouriteResponse> getFavourites(){
         return favouriteService.getFavourites();
     }
-
+    // Deleting The Favourite City //
     @DeleteMapping("/{id}")
     public void deleteFavourite(@PathVariable Long id){
         favouriteService.deleteFavourite(id);

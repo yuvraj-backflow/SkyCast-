@@ -23,11 +23,11 @@ public class FavouriteService {
                 .orElseGet(()-> favouriteRepo.save(new Favourite(city)));
 return convertToDto(favourite);
     }
-//fetch all favourite City
+//fetch all favourite City in the Descending the Order //
     public List<FavouriteResponse> getFavourites() {
         return favouriteRepo.findAllByOrderByCreatedAtDesc().stream().map(this::convertToDto).toList();
     }
-    //Delete item
+    //Delete City //
     public void deleteFavourite(Long favouriteId) {
          Favourite favourite = favouriteRepo.findById(favouriteId).orElseThrow(()->  new ResponseStatusException(
                 HttpStatus.NOT_FOUND,"Your Favourite City is not Avaliable"));

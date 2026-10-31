@@ -12,13 +12,12 @@ import java.util.List;
 public class SearchController {
     @Autowired
     private  SearchHistoryService searchHistoryService ;
-
-
-
+  // Search History //
 @GetMapping
     public List<SearchHistory> getSearchHistory(){
         return searchHistoryService.getHistory();
 }
+  // Search History Delete //
 @DeleteMapping("/{city}")
     public void delete(@PathVariable  String city){
         searchHistoryService.deleteHistory(city);
